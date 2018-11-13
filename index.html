@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <script src="./pixi.min.js"></script>
+    <script src="./pixi-viewport.min.js"></script>
+  </head><body>
+
+<style>
+body { margin: 0; }
+ 
+</style>
+<script>
+
+ var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+ 
+var app = new PIXI.Application({width: w, height: h, h, backgroundColor: 0xffffff});
+console.log(PIXI.utils.isWebGLSupported())
+function rnd(min, max){
+    return Math.floor(Math.random()*(max-min+1)+min );
+}
+ 
+// create viewport
+var viewport = new PIXI.extras.Viewport({
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    worldWidth: w,
+    worldHeight: h,
+    interaction: app.renderer.interaction // the interaction module is important for wheel() to work properly when renderer.view is placed or scaled
+});
+
+// add the viewport to the stage
+document.body.appendChild(app.view);
+app.stage.addChild(viewport);
+
+// activate plugins
+viewport
+    .drag()
+    .pinch()
+    .wheel()
+    .clamp({ direction: 'all' })
+ /* .clampZoom({
+  *   minWidth: w * 3,
+  *   minHeight: h * 3,
+  *   maxWidth: w,
+  *   maxHeight: h,
+  * })*/
+    .decelerate();
+
+// add a red box
+for (var i = 0; i < 30; i++) {
+   /* var sprite = viewport.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
+    * sprite.tint = 0xff0000;
+    * sprite.width = sprite.height = 20
+    * console.log(rnd(0, w))
+    * sprite.position.set(rnd(0, w), rnd(0, h));*/
+   let circle = new PIXI.Graphics();
+   circle.beginFill(0xFF0000);
+   circle.drawCircle(0, 0, 10);
+   circle.endFill();
+   circle.x = rnd(0, w);
+   circle.y = rnd(0, h)
+   viewport.addChild(circle);
+}
+</script>
+    
+</body></html>
